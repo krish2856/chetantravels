@@ -3,8 +3,20 @@
 // =====================================================
 document.addEventListener('DOMContentLoaded', function () {
 
-    // API Base URL (relative path works for local, same-origin, or custom hosting)
-    const API_BASE_URL = '';
+    // Dynamic API URL Detection (points to Render backend)
+    const getApiBaseUrl = () => {
+        const host = window.location.hostname;
+        if (host.includes('chetantravels-1.onrender.com')) {
+            return window.location.origin;
+        }
+        if ((host === 'localhost' || host === '127.0.0.1') && window.location.port === '3000') {
+            return '';
+        }
+        // External hosting / static hosting / Live Server fallback
+        return 'https://chetantravels-1.onrender.com';
+    };
+
+    const API_BASE_URL = getApiBaseUrl();
 
     // DOM Elements
     const form = document.getElementById('bookingForm');
