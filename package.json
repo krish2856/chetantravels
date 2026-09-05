@@ -1,0 +1,33 @@
+{
+  "name": "other-booking-module",
+  "version": "1.0.0",
+  "description": "Other Booking Module for Bus Reservation Management System",
+  "main": "backend/server.js",
+  "scripts": {
+    "start": "node backend/server.js",
+    "dev": "nodemon backend/server.js"
+  },
+  "keywords": [
+    "bus",
+    "reservation",
+    "booking",
+    "express",
+    "mysql"
+  ],
+  "author": "Senior Full Stack Developer",
+  "license": "MIT",
+  "dependencies": {
+    "body-parser": "^1.20.2",
+    "cors": "^2.8.6",
+    "dotenv": "^16.4.5",
+    "ejs": "^3.1.10",
+    "express": "^4.19.2",
+    "express-validator": "^7.2.0",
+    "method-override": "^3.0.0",
+    "morgan": "^1.10.0",
+    "pg": "^8.22.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.4"
+  }
+}

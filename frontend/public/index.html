@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Other Booking Pro</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link href="css/style.css" rel="stylesheet">
+</head>
+
+<body>
+
+    <!-- Header -->
+    <header class="app-header py-3 px-4 mb-4">
+        <div class="container-fluid d-flex align-items-center justify-content-between">
+            <div class="d-flex align-items-center gap-3">
+                <i class="bi bi-bus-front fs-2 text-info"></i>
+                <div>
+                    <h1 class="h4 mb-0 fw-bold">Otherbooking</h1>
+                    <small class="opacity-75">Booking Module</small>
+                </div>
+            </div>
+            <div>
+                <span class="badge bg-light text-dark px-3 py-2 rounded-pill fw-semibold">
+                    <i class="bi bi-ticket-perforated me-1 text-primary"></i>
+                    Next: <span id="nextTicketBadge">Loading...</span>
+                </span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="container-fluid px-4 pb-5">
+        <div id="alertBox"></div>
+
+        <!-- BOOKING FORM CARD -->
+        <div class="card app-card mb-4">
+            <div class="card-header app-card-header d-flex justify-content-between align-items-center">
+                <span><i class="bi bi-journal-plus me-2"></i>Booking Details</span>
+                <span class="badge bg-primary text-white" id="formModeLabel">Mode: New Entry</span>
+            </div>
+            <div class="card-body p-4">
+                <form id="bookingForm" novalidate>
+                    <input type="hidden" id="bookingId">
+
+                    <!-- Section: Trip Information -->
+                    <div class="form-section-title"><i class="bi bi-geo-alt me-1"></i>Trip Information</div>
+                    <div class="row g-3 mb-3">
+                        <div class="col-md-3">
+                            <label class="form-label">Booking Date <span class="text-danger">*</span></label>
+                            <input type="date" class="form-control" id="booking_date" required>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label">Journey Date <span class="text-danger">*</span></label>
+                            <input type="date" class="form-control" id="journey_date" required>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label">From <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="from_place" placeholder="e.g. Ahmedabad"
+                                required>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label">To <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="to_place" placeholder="e.g. Mumbai" required>
+                        </div>
+                    </div>
+
+                    <div class="row g-3 mb-3">
+                        <div class="col-md-4">
+                            <label class="form-label">Operator <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="operator" placeholder="Travel Operator Name"
+                                required>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Journey Time</label>
+                            <input type="time" class="form-control" id="journey_time">
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Ticket Number</label>
+                            <input type="text" class="form-control fw-bold text-accent" id="ticket_no"
+                                placeholder="Auto-generated" readonly>
+                        </div>
+                    </div>
+
+                    <!-- Section: Passenger Information -->
+                    <div class="form-section-title"><i class="bi bi-person-vcard me-1"></i>Passenger Information</div>
+                    <div class="row g-3 mb-3">
+                        <div class="col-md-3">
+                            <label class="form-label">Passenger Name <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="passenger_name" placeholder="Full Name"
+                                required>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label">Mobile Number <span class="text-danger">*</span></label>
+                            <input type="tel" class="form-control" id="passenger_mobile" maxlength="10"
+                                placeholder="10-digit mobile number" required>
+                            <div class="form-text text-danger d-none" id="mobileError">Enter valid 10-digit mobile
+                                number.</div>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label">Gender</label>
+                            <select class="form-select" id="passenger_gender">
+                                <option value="Male">Male</option>
+                                <option value="Female">Female</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label">Sleeper Type</label>
+                            <select class="form-select" id="seat_type">
+                                <option value="A/C Sleeper">A/C Sleeper</option>
+                                <option value="Non A/C Sleeper">Non A/C Sleeper</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="row g-3 mb-3">
+                        <div class="col-md-3">
+                            <label class="form-label">Seat Number <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="seat_number" placeholder="e.g. L12 or 15"
+                                required>
+                        </div>
+                        <div class="col-md-2">
+                            <label class="form-label">Total Seat <span class="text-danger">*</span></label>
+                            <input type="number" class="form-control" id="total_seat" placeholder="e.g. 2" required>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label">Pickup Point</label>
+                            <input type="text" class="form-control" id="pickup_point" placeholder="Pickup location">
+                        </div>
+                        <div class="col-md-2">
+                            <label class="form-label">Drop Point</label>
+                            <input type="text" class="form-control" id="drop_point" placeholder="Drop location">
+                        </div>
+                        <div class="col-md-2">
+                            <label class="form-label">PNR</label>
+                            <input type="text" class="form-control" id="pnr" placeholder="Optional PNR">
+                        </div>
+                    </div>
+
+                    <!-- Section: Payment & Fare -->
+                    <div class="form-section-title"><i class="bi bi-currency-rupee me-1"></i>Fare & Payment Details
+                    </div>
+                    <div class="row g-3 mb-3">
+                        <div class="col-md-3">
+                            <label class="form-label">Fare (₹) <span class="text-danger">*</span></label>
+                            <input type="number" class="form-control calc-field" id="fare" min="0" step="0.01"
+                                placeholder="0.00" required>
+                        </div>
+                        <div class="col-md-2">
+                            <label class="form-label">Discount (₹)</label>
+                            <input type="number" class="form-control calc-field" id="discount" min="0" step="0.01"
+                                value="0">
+                        </div>
+                        <div class="col-md-2">
+                            <label class="form-label">GST (₹)</label>
+                            <input type="number" class="form-control calc-field" id="gst" min="0" step="0.01" value="0">
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label">Net Amount (₹)</label>
+                            <input type="text" class="form-control fw-bold bg-light" id="net_amount" value="0.00"
+                                readonly>
+                        </div>
+                        <div class="col-md-2">
+                            <label class="form-label">Paid Amount (₹)</label>
+                            <input type="number" class="form-control calc-field" id="paid_amount" min="0" step="0.01"
+                                value="0">
+                        </div>
+                    </div>
+
+                    <div class="row g-3 mb-3">
+                        <div class="col-md-3">
+                            <label class="form-label">Payment Mode</label>
+                            <select class="form-select" id="payment_mode">
+                                <option value="Cash">Cash</option>
+                                <option value="UPI">UPI / GPay</option>
+                                <option value="Card">Credit / Debit Card</option>
+                                <option value="NetBanking">Net Banking</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label">Bus Number</label>
+                            <input type="text" class="form-control" id="bus_number" placeholder="e.g. GJ-01-AB-1234">
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label">Booking Status</label>
+                            <select class="form-select" id="booking_status">
+                                <option value="Confirmed">Confirmed</option>
+                                <option value="Pending">Pending</option>
+                                <option value="Cancelled">Cancelled</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label">Remarks</label>
+                            <input type="text" class="form-control" id="remarks" placeholder="Optional notes">
+                        </div>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="d-flex flex-wrap gap-2 mt-4 align-items-center">
+                        <button type="button" class="btn btn-outline-secondary" id="btnNew"><i
+                                class="bi bi-file-earmark-plus me-1"></i>New</button>
+                        <button type="submit" class="btn btn-accent" id="btnSave"><i
+                                class="bi bi-save me-1"></i>Save</button>
+                        <button type="button" class="btn btn-warning text-white" id="btnUpdate"><i
+                                class="bi bi-arrow-repeat me-1"></i>Update</button>
+                        
+                        <div class="form-check mx-2 border rounded px-2 py-1 bg-light">
+                            <input class="form-check-input ms-0 me-2" type="checkbox" id="shareWhatsapp" checked style="cursor: pointer;">
+                            <label class="form-check-label fw-semibold text-success" for="shareWhatsapp" style="cursor: pointer;">
+                                <i class="bi bi-whatsapp me-1"></i>Share on Save
+                            </label>
+                        </div>
+
+                        <button type="button" class="btn btn-danger" id="btnDelete"><i
+                                class="bi bi-trash me-1"></i>Delete</button>
+                        <button type="button" class="btn btn-outline-dark" id="btnClear"><i
+                                class="bi bi-eraser me-1"></i>Clear</button>
+                        <div class="vr d-none d-md-block mx-1"></div>
+                        <button type="button" class="btn btn-outline-primary" id="btnPrint"><i
+                                class="bi bi-printer me-1"></i>Print Ticket</button>
+                        <button type="button" class="btn btn-outline-success" id="btnPdf"><i
+                                class="bi bi-file-earmark-pdf me-1"></i>Download PDF</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- SEARCH CARD -->
+        <div class="card app-card mb-4">
+            <div class="card-header app-card-header">
+                <i class="bi bi-search me-2"></i>Search Bookings
+            </div>
+            <div class="card-body p-3">
+                <div class="row g-2 align-items-end">
+                    <div class="col-md-3">
+                        <label class="form-label">Search By</label>
+                        <select class="form-select" id="searchField">
+                            <option value="ticket_no">Ticket Number</option>
+                            <option value="passenger_name">Passenger Name</option>
+                            <option value="passenger_mobile">Phone Number</option>
+                            <option value="pnr">PNR</option>
+                            <option value="journey_date">Journey Date</option>
+                        </select>
+                    </div>
+                    <div class="col-md-5">
+                        <label class="form-label">Keyword</label>
+                        <input type="text" class="form-control" id="searchKeyword"
+                            placeholder="Enter keyword to search...">
+                        <input type="date" class="form-control d-none" id="searchKeywordDate">
+                    </div>
+                    <div class="col-md-4 d-flex gap-2">
+                        <button class="btn btn-accent w-100" id="btnSearch"><i
+                                class="bi bi-search me-1"></i>Search</button>
+                        <button class="btn btn-outline-secondary w-100" id="btnResetSearch"><i
+                                class="bi bi-arrow-counterclockwise me-1"></i>Reset</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- BOOKINGS TABLE CARD -->
+        <div class="card app-card">
+            <div class="card-header app-card-header d-flex justify-content-between align-items-center">
+                <span><i class="bi bi-table me-2"></i>All Bookings</span>
+                <span class="badge-soft" id="recordCount">Loading...</span>
+            </div>
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table app-table align-middle mb-0" id="bookingsTable">
+                        <thead>
+                            <tr>
+                                <th>Ticket No</th>
+                                <th>Journey Date</th>
+                                <th>Passenger Name</th>
+                                <th>Phone No</th>
+                                <th>Operator</th>
+                                <th>Fare</th>
+                                <th class="text-center">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="bookingsTableBody">
+                            <tr id="emptyRow">
+                                <td colspan="7" class="text-center text-muted py-4">
+                                    <div class="spinner-border text-primary mb-2" role="status"></div>
+                                    <div>Loading bookings...</div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Hidden Print Area for HTML2Canvas / PDF -->
+    <div id="printArea" class="d-none"></div>
+
+    <!-- Bootstrap 5 JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- PDF Generation Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <!-- Application Logic -->
+    <script src="js/other-booking.js"></script>
+</body>
+
+</html>
